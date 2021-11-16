@@ -2,56 +2,49 @@
   <div class="form">
     <form @submit="sendRequest">
       <section>
+        
         <h2>Личные данные</h2>
 
         <div class="form-row">
           <Field
-            v-bind="form_data.last_name"
-            v-model="form_data.last_name.value"
-            :error.sync="form_data.last_name.error"
+            v-bind="form_fields.last_name"
+            v-model="form_data.last_name"
+            @onError="getErrorHandler"
           />
           <Field
-            v-bind="form_data.first_name"
-            v-model="form_data.first_name.value"
-            :error.sync="form_data.first_name.error"
+            v-bind="form_fields.first_name"
+            v-model="form_data.first_name"
+            @onError="getErrorHandler"  
           />
           <Field
-            v-bind="form_data.patronymic"
-            v-model="form_data.patronymic.value"
-            :error.sync="form_data.patronymic.error"
+            v-bind="form_fields.patronymic"
+            v-model="form_data.patronymic"
+            @onError="getErrorHandler"  
           />
         </div>
 
         <div class="form-row date_birthday-wrapper">
           <Field
-            v-bind="form_data.date_birthday"
-            v-model="form_data.date_birthday.value"
-            :error.sync="form_data.date_birthday.error"
-            placeholder="дд.мм.гггг"
-            name="date_birthday"
+            v-bind="form_fields.date_birthday"
+            v-model="form_data.date_birthday"
+            @onError="getErrorHandler"  
           />
         </div>
 
         <div class="form-row email-wrapper">
           <Field
-            v-bind="form_data.email"
-            v-model="form_data.email.value"
-            :error.sync="form_data.email.error"
-            name="email"
+            v-bind="form_fields.email"
+            v-model="form_data.email"
+            @onError="getErrorHandler"  
           />
         </div>
 
         <div class="form-row">
           <Field
             type="radio"
-            name="sex"
-            v-bind="form_data.sex"
-            v-model="form_data.sex.value"
-            :error.sync="form_data.sex.error"
-            :options="[
-              { label: 'Мужской', id: 'male' },
-              { label: 'Женский', id: 'female' },
-            ]"
+            v-bind="form_fields.sex"
+            v-model="form_data.sex"
+            @onError="getErrorHandler"            
           />
         </div>
       </section>
@@ -71,50 +64,41 @@
         <template v-if="isRussain">
           <div class="form-row">
             <Field
-              v-bind="form_data.passport_series"
-              v-model="form_data.passport_series.value"
-              :error.sync="form_data.passport_series.error"
-              name="passport_series"
+              v-bind="form_fields.passport_series"
+              v-model="form_data.passport_series"
+              @onError="getErrorHandler"  
             />
             <Field
-              v-bind="form_data.passport_number"
-              v-model="form_data.passport_number.value"
-              :error.sync="form_data.passport_number.error"
-              name="passport_number"
+              v-bind="form_fields.passport_number"
+              v-model="form_data.passport_number"
+              @onError="getErrorHandler"  
             />
             <Field
-              v-bind="form_data.date_issue"
-              v-model="form_data.date_issue.value"
-              :error.sync="form_data.date_issue.error"
-              name="date_issue"
-              placeholder="дд.мм.гггг"
+              v-bind="form_fields.date_issue"
+              v-model="form_data.date_issue"
+              @onError="getErrorHandler"  
             />
           </div>
 
           <div class="form-row">
             <Field
-              v-bind="form_data.isChangeName"
               type="radio"
-              v-model="form_data.isChangeName.value"
-              name="isChangeName"
-              :options="[
-                { label: 'Да', id: true },
-                { label: 'Нет', id: false },
-              ]"
+              v-bind="form_fields.isChangeName"              
+              v-model="form_data.isChangeName"        
             />
           </div>
 
-          <template v-if="form_data.isChangeName.value">
+          <template v-if="form_data.isChangeName">
             <div class="form-row">
               <Field
-                v-bind="form_data.last_name_old"
-                v-model="form_data.last_name_old.value"
-                :error.sync="form_data.last_name_old.error"
+                v-bind="form_fields.last_name_old"
+                v-model="form_data.last_name_old"
+                @onError="getErrorHandler"  
               />
               <Field
-                v-bind="form_data.first_name_old"
-                v-model="form_data.first_name_old.value"
-                :error.sync="form_data.first_name_old.error"
+                v-bind="form_fields.first_name_old"
+                v-model="form_data.first_name_old"
+                @onError="getErrorHandler"  
               />
             </div>
           </template>
@@ -123,23 +107,23 @@
         <template v-else-if="form_data.selectedCitizenship">
           <div class="form-row">
             <Field
-              v-bind="form_data.last_name_latin"
-              v-model="form_data.last_name_latin.value"
-              :error.sync="form_data.last_name_latin.error"
+              v-bind="form_fields.last_name_latin"
+              v-model="form_data.last_name_latin"
+              @onError="getErrorHandler" 
             />
             <Field
-              v-bind="form_data.first_name_latin"
-              v-model="form_data.first_name_latin.value"
-              :error.sync="form_data.first_name_latin.error"
+              v-bind="form_fields.first_name_latin"
+              v-model="form_data.first_name_latin"
+              @onError="getErrorHandler" 
             />
           </div>
 
           <div class="form-row">
             <Field
-              v-bind="form_data.passport_number"
-              :test="null"
-              v-model="form_data.passport_number.value"
-              :error.sync="form_data.passport_number.error"
+              v-bind="form_fields.passport_number"
+              rule=""
+              v-model="form_data.passport_number"
+              @onError="getErrorHandler" 
             />
 
             <DropDown
@@ -151,8 +135,8 @@
             />
 
             <Field
-              v-bind="form_data.passportType"
-              v-model="form_data.passportType.value"
+              v-bind="form_fields.passportType"
+              v-model="form_data.passportType"
               :options="passportTypes"
               type="select"
             />
@@ -170,21 +154,13 @@
 <script>
 import citizenships from "@/assets/data/citizenships.json";
 import countries from "@/assets/data/countries.json";
-
 import passportTypes from "@/assets/data/passport-types.json";
+import {eventBus} from "@/main";
+import {form_fields}  from '@/form_fields'
 
-import {
-  onlyCyrillic,
-  onlyLatin,
-  isEmail,
-  isDate,
-  passportSeries,
-  passportNumber,
-} from "@/utils/validators.js";
-import { eventBus } from "@/main";
-
-import DropDown from "./DropDown.vue";
-import Field from "./Field.vue";
+import DropDown from "./DropDown";
+import Field from "./Field";
+import Vue from 'vue';
 
 export default {
   components: {
@@ -194,100 +170,19 @@ export default {
 
   data() {
     return {
+
       form_data: {
-        last_name: {
-          value: "",
-          title: "Фамилия",
-          test: onlyCyrillic,
-        },
 
-        last_name_latin: {
-          value: "",
-          title: "Фамилия на латинице",
-          test: onlyLatin,
-        },
-
-        first_name: {
-          value: "",
-          title: "Имя",
-          test: onlyCyrillic,
-        },
-
-        first_name_latin: {
-          value: "",
-          title: "Имя на латинице",
-          test: onlyLatin,
-        },
-
-        patronymic: {
-          value: "",
-          title: "Отчество",
-          test: onlyCyrillic,
-        },
-
-        date_birthday: {
-          value: "",
-          title: "Дата рождения",
-          test: isDate,
-        },
-
-        email: {
-          value: "",
-          title: "E-mail",
-          test: isEmail,
-        },
-
-        sex: {
-          value: null,
-          title: "Пол",
-        },
-
-        passport_number: {
-          value: "",
-          title: "Номер паспорта",
-          test: passportNumber,
-        },
-
-        passport_series: {
-          value: "",
-          title: "Серия паспорта",
-          test: passportSeries,
-        },
-
-        date_issue: {
-          value: "",
-          title: "Дата выдачи",
-          test: isDate,
-        },
-
-        isChangeName: {
-          value: false,
-          title: "Меняли ли фамилию или имя?",
-        },
-
-        last_name_old: {
-          value: "",
-          title: "Предыдущая фамилия",
-          test: onlyCyrillic,
-        },
-
-        first_name_old: {
-          value: "",
-          title: "Предыдущее имя",
-          test: onlyCyrillic,
-        },
-
-        passportType: {
-          value: null,
-          title: "Тип паспорта",
-        },
-
+        ...this.mapFormData(form_fields),
         selectedCitizenship: null,
         selectedCountry: null,
       },
 
+      form_fields: this.mapFormFields(form_fields),
+
       citizenships: [],
       passportTypes: [],
+      errors: []
     };
   },
 
@@ -298,6 +193,7 @@ export default {
   },
 
   created() {
+
     this.citizenships = citizenships;
     this.countries = countries;
     this.passportTypes = passportTypes.map((item) => ({
@@ -306,13 +202,33 @@ export default {
     }));
   },
 
+
   methods: {
+
+    mapFormData(obj) {            
+        return Object.assign({}, ...Object.keys(obj).map(key => ({
+          [key]: 'default' in obj[key] ?  obj[key].default : ''
+        })));
+    },
+
+
+    mapFormFields(obj) {            
+        return Object.assign({}, ...Object.keys(obj).map(key => ({
+            [key]: {...obj[key], name: key}
+        })));
+    },
+
     selectCitizenshipHandler(value) {
       this.form_data.selectedCitizenship = value;
     },
 
     selectCountryHandler(value) {
       this.form_data.selectedCountry = value;
+    },
+
+    getErrorHandler(error) {
+      
+        Vue.set(this.form_fields[error.field], 'error', error.text )  
     },
 
     sendRequest(event) {
@@ -322,19 +238,16 @@ export default {
       eventBus.$emit("validate");
 
       if (this.validate()) {
-        const sendData = {};
-        Object.keys(this.form_data).forEach(
-          (key) => (sendData[key] = this.form_data[key]?.value)
-        );
 
-        console.log(JSON.stringify(sendData));
+        console.log(JSON.stringify(this.form_data))
+        
       }
     },
 
     validate() {
       let isValid = true;
 
-      Object.values(this.form_data).forEach((field) => {
+      Object.values(this.form_fields).forEach((field) => {
         if (field?.error?.length > 0) {
           isValid = false;
         }

@@ -3,17 +3,17 @@
     <div class="label">{{ title }}</div>
     <div
       class="inline-item"
-      v-for="(option, index) in options"
+      v-for="option in options"
       :key="option.id"
     >
       <input
         :type="type"
         :name="name"
-        :id="option.id + option.label + index"
+        :id="name + '_' + option.id"
         :value="option.id"
         @change="input($event.target._value)"
       />
-      <label class="label-radio" :for="option.id + option.label + index">{{
+      <label class="label-radio" :for="name + '_' + option.id">{{
         option.label
       }}</label>
     </div>
@@ -51,19 +51,20 @@
 </template>
 
 <script>
-import { eventBus } from "@/main";
+import {eventBus} from "@/main";
+import {validate} from "@/utils/validation";
 
 export default {
   props: {
-    test: {
-      type: Function,
-    },
 
+    rule: {
+      type: String,
+      default: ''
+    },
     type: {
       type: String,
       default: "text",
     },
-
     title: {
       type: String,
       default: "",
@@ -87,6 +88,7 @@ export default {
       type: String,
       default: "",
     },
+
   },
 
   data() {
@@ -103,8 +105,8 @@ export default {
   },
 
   destroyed() {
-    console.log("dest");
-    this.$emit("update:error", "");
+    
+    this.$emit("onError", {text: '', field: this.name});
     this.$emit("input", "");
   },
 
@@ -117,13 +119,16 @@ export default {
     },
 
     validateHandler(value) {
+
       this.validate(value);
     },
 
     validate(value) {
-      if (typeof this.test === "function") {
-        const result = this.test(value);
-        this.$emit("update:error", result.error);
+      
+      if (this.rule.length > 0) {
+
+        const result =  validate(value, this.rule);
+        this.$emit("onError", {text: result.error, field: this.name});
         this.hasError = !result.isValid;
       }
     },
