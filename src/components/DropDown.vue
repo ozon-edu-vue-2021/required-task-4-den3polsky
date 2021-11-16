@@ -51,6 +51,8 @@ import Vue from "vue";
 import throttle from "lodash.throttle";
 import vClickOutside from "v-click-outside";
 
+const TIME_TROTTLE_WAIT = 1100
+
 Vue.use(vClickOutside);
 
 export default {
@@ -93,8 +95,8 @@ export default {
       this.filtredValues = this.items.filter((item) => {
         return item[this.label_field].toLowerCase().includes(finded);
       });
-    }, 1100),
-
+    }, TIME_TROTTLE_WAIT),
+    
     inputHandler() {
       this.isOpenDropDown = true;
       this.getfiltredValuesList();
